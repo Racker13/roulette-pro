@@ -1,4 +1,3 @@
-
 import React from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -10,7 +9,7 @@ export default function CR6Downloader() {
     try {
       // Create a new zip file
       const zip = new JSZip();
-      
+
       // Add the required files to the zip
       const bettingBoardCardContent = `import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,7 +65,7 @@ export function BettingBoardCard() {
                 0
               </div>
             </div>
-            
+
             {/* Numbers 1-36 */}
             <div className="col-span-12">
               <div className="grid grid-cols-12 gap-1">
@@ -226,14 +225,37 @@ export const useRouletteStore = create<RouletteState>((set) => ({
   clearSpinResults: () => set({ spinResults: [] })
 }));`;
 
+      const getAttributesForNumberContent = `import { RouletteColor, RouletteNumber } from "./types";
+
+interface NumberAttributes {
+    color: RouletteColor;
+    isEven: boolean;
+    isLow: boolean;
+}
+
+export const getAttributesForNumber = (number: RouletteNumber): NumberAttributes => {
+    const num = typeof number === 'number' ? number : -1;
+    const color: RouletteColor = number === 0 ? 'green' :
+        [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number as number) ? 'red' : 'black';
+    const isEven = num > 0 && num % 2 === 0;
+    const isLow = num >= 1 && num <= 18;
+
+    return {
+        color,
+        isEven,
+        isLow,
+    };
+};`;
+
       // Add files to the zip
       zip.file("BettingBoardCard.tsx", bettingBoardCardContent);
       zip.file("types.ts", rouletteTypesContent);
       zip.file("useRouletteStore.ts", rouletteStoreContent);
-      
+      zip.file("getAttributesForNumber.ts", getAttributesForNumberContent);
+
       // Generate the zip
       const content = await zip.generateAsync({ type: "blob" });
-      
+
       // Save the zip file
       saveAs(content, "cr7-files.zip");
     } catch (error) {
