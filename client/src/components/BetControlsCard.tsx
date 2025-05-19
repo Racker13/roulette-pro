@@ -1,62 +1,38 @@
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
-import type { ChipValue } from '@/lib/types';
-import { useRouletteStore } from '@/store/useRouletteStore';
-
-const CHIP_VALUES: ChipValue[] = [1, 5, 25, 100];
-
-export const BetControlsCard = () => {
-  const { selectedChipValue, setSelectedChipValue, autoSpinCount, autoSpinMinutes } = useRouletteStore();
-
-  const showAutoSpinButton = autoSpinCount > 0 || autoSpinMinutes > 0;
-
+export function BetControlsCard() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bet Controls</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex flex-wrap gap-2">
-            {CHIP_VALUES.map((amount) => (
-              <Button
-                key={amount}
-                onClick={() => setSelectedChipValue(amount)}
-                variant={selectedChipValue === amount ? "default" : "outline"}
-                className={`
-                  w-16 h-16 rounded-full font-bold
-                  ${selectedChipValue === amount ? 'ring-2 ring-offset-2 ring-primary' : ''}
-                `}
-              >
-                ${amount}
-              </Button>
-            ))}
+    <Card className="bg-white rounded-lg shadow">
+      <CardContent className="p-4">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Bet Controls</h2>
+        
+        <div className="grid grid-cols-5 gap-2">
+          {[1, 5, 25, 100, 500].map(value => (
+            <button
+              key={`chip-${value}`}
+              className={`h-12 w-12 rounded-full font-bold text-sm flex items-center justify-center mx-auto
+                ${value === 1 ? 'bg-red-100 border-2 border-red-300 text-red-700' : 
+                value === 5 ? 'bg-green-100 border-2 border-green-300 text-green-700' :
+                value === 25 ? 'bg-blue-100 border-2 border-blue-300 text-blue-700' :
+                value === 100 ? 'bg-purple-100 border-2 border-purple-300 text-purple-700' :
+                'bg-yellow-100 border-2 border-yellow-600 text-yellow-600'}`
+              }
+            >
+              ${value}
+            </button>
+          ))}
+        </div>
+        
+        <div className="flex justify-between mt-4">
+          <div className="space-x-2">
+            <Button variant="outline">Clear Bets</Button>
+            <Button variant="outline">Double Bets</Button>
           </div>
-          <div className="text-sm text-muted-foreground">
-            Selected bet amount: ${selectedChipValue}
-          </div>
-
-          {showAutoSpinButton && (
-            <>
-              <Separator />
-              <Button 
-                className="w-full"
-                variant="default"
-                onClick={() => {
-                  // Auto-spin logic will be implemented later
-                  console.log('Auto-spin started');
-                }}
-              >
-                Start Auto-Spin
-                {autoSpinCount > 0 && ` (${autoSpinCount} spins)`}
-                {autoSpinMinutes > 0 && ` (${autoSpinMinutes} minutes)`}
-              </Button>
-            </>
-          )}
+          <Button className="bg-green-600 hover:bg-green-700 text-white">Spin</Button>
         </div>
       </CardContent>
     </Card>
   );
-};
+}

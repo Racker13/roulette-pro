@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-export function SessionSetupCard() {
+const NewSessionSetupCard = () => {
   return (
     <Card className="bg-white rounded-lg shadow">
       <CardContent className="p-4">
@@ -72,4 +72,6 @@ export function SessionSetupCard() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default NewSessionSetupCard;

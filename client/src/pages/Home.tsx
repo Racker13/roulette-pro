@@ -3,6 +3,8 @@ import RouletteTable from "@/components/RouletteTable";
 import BankrollCard from "@/components/BankrollCard";
 import SpinHistory from "@/components/SpinHistory";
 import SessionStats from "@/components/SessionStats";
+import NewSessionSetupCard from "@/components/NewSessionSetupCard";
+import NewSessionControlsCard from "@/components/NewSessionControlsCard";
 import { useRoulette } from "@/hooks/useRoulette";
 
 export default function Home() {
@@ -30,8 +32,10 @@ export default function Home() {
   return (
     <Layout>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Bankroll & Controls */}
-        <div className="lg:col-span-3">
+        {/* Session Setup & Controls */}
+        <div className="lg:col-span-3 space-y-4">
+          <NewSessionSetupCard />
+          <NewSessionControlsCard />
           <BankrollCard
             bankroll={bankroll}
             sessionPL={sessionPL}

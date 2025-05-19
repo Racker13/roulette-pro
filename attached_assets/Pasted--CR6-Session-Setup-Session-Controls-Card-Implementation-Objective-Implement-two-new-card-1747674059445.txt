@@ -1,0 +1,77 @@
+# CR6 - Session Setup & Session Controls Card Implementation
+
+## 🎯 Objective
+Implement two new cards in the app interface:
+- `SessionSetupCard`
+- `SessionControlsCard`
+
+These cards should sit **at the top of the main UI column**, above BetControlsCard and all spin/bet-related components.
+
+---
+
+## 🧱 Card Hierarchy (top to bottom)
+1. `SessionSetupCard`
+2. `SessionControlsCard`
+3. `BetControlsCard`
+4. `BettingBoardCard`
+5. `ActiveBetsCard`
+6. `LastResultsCard`
+7. `SessionHistoryCard`
+
+Cards should be spaced consistently using the app's spacing convention (e.g. `space-y-4`).
+
+---
+
+## 🧩 SessionSetupCard
+**Purpose**: Configure a session before starting (strategy, account, bankroll).
+
+### Layout: Single Row / Flex
+- **Strategy** (`<Select>`)
+  - Wide (should flex-grow)
+  - Placeholder: `Select Strategy`
+  - Use consistent dropdown UI (same as Account field)
+- **Account Type** (`<Select>`)
+  - Narrow width (e.g. `w-28`)
+  - Options: `Free`, `Real`
+- **Bankroll** (`<Input type='number'>`)
+  - Narrow width (e.g. `w-24`)
+  - Max 4 digits (1000, 5000, etc.)
+
+**Implementation Notes:**
+- Use shadcn/ui components.
+- Use the same dropdown system for both select fields. Both should show down-facing arrows (▼).
+
+---
+
+## 🕹️ SessionControlsCard
+**Purpose**: Manage session state and prep for future auto-spin features.
+
+### Layout: Vertical Stack
+- **Button Row**
+  - `Start Session` (`<Button variant="default">`)
+  - `End Session` (`<Button variant="destructive">`)
+- **Auto Spin Config** (Grid - 2 cols)
+  - `Auto Spins` (`<Input type='number'>`, placeholder: `100`)
+  - `Duration (mins)` (`<Input type='number'>`, placeholder: `5`)
+
+### Zustand Store (if not already present):
+```ts
+const useSessionStore = create((set) => ({
+  autoSpinCount: 0,
+  autoSpinMinutes: 0,
+  setAutoSpinCount: (count) => set({ autoSpinCount: count }),
+  setAutoSpinMinutes: (mins) => set({ autoSpinMinutes: mins })
+}));
+```
+
+These values do not need to drive any behavior yet — only UI binding.
+
+---
+
+## 🔁 Next Steps After Implementation
+- Confirm card order renders correctly.
+- Ensure dropdown and input sizing match design intent.
+- Make sure buttons and fields are Zustand-ready.
+- Verify visual consistency of dropdown arrows and card spacing.
+
+This CR sets the foundation for live session tracking, so future logic will build on these components.

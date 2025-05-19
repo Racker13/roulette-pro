@@ -1,61 +1,48 @@
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
-import { useRouletteStore } from '@/store/useRouletteStore';
-import { CopyIcon, Trash2Icon } from 'lucide-react';
+export function ActiveBetsCard() {
+  // Placeholder for active bets
+  const activeBets = [
+    { id: '1', type: 'Red', amount: 5 },
+    { id: '2', type: 'Number 17', amount: 1 }
+  ];
 
-export const ActiveBetsCard = () => {
-  const { placedBets, clearBets, exportBets } = useRouletteStore();
-  
-  const handleExport = () => {
-    navigator.clipboard.writeText(exportBets());
+  const getChipBgColor = (amount: number) => {
+    if (amount === 1) return "bg-red-100 text-red-800";
+    if (amount === 5) return "bg-green-100 text-green-800";
+    if (amount === 25) return "bg-blue-100 text-blue-800";
+    if (amount === 100) return "bg-purple-100 text-purple-800";
+    return "bg-yellow-100 text-yellow-600";
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Active Bets</CardTitle>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleExport}
-            title="Export bets"
-          >
-            <CopyIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={clearBets}
-            title="Clear bets"
-          >
-            <Trash2Icon className="h-4 w-4" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {placedBets.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No active bets</p>
-        ) : (
+    <Card className="bg-white rounded-lg shadow">
+      <CardContent className="p-4">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Active Bets</h2>
+        
+        {activeBets.length > 0 ? (
           <div className="space-y-2">
-            {placedBets.map((bet) => (
-              <div key={bet.id} className="flex justify-between items-center">
-                <span>{bet.displayName}</span>
-                <span className="font-mono">${bet.amount}</span>
+            {activeBets.map((bet) => (
+              <div 
+                key={bet.id} 
+                className="flex justify-between items-center text-sm p-2 bg-gray-50 rounded border border-gray-200"
+              >
+                <span className="font-medium">{bet.type}</span>
+                <span className={`px-2 py-1 rounded-md ${getChipBgColor(bet.amount)}`}>
+                  ${bet.amount}
+                </span>
               </div>
             ))}
-            <Separator />
-            <div className="flex justify-between items-center font-bold">
-              <span>Total</span>
-              <span className="font-mono">
-                ${placedBets.reduce((sum, bet) => sum + bet.amount, 0)}
-              </span>
+            <div className="mt-3 flex justify-between">
+              <span className="text-sm font-medium">Total Bet Amount:</span>
+              <span className="text-sm font-bold">$6</span>
             </div>
           </div>
+        ) : (
+          <div className="text-gray-400 text-sm p-4 text-center">No active bets</div>
         )}
       </CardContent>
     </Card>
   );
-};
+}
