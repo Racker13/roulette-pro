@@ -1,3 +1,4 @@
+
 import React from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -11,145 +12,153 @@ export default function CR6Downloader() {
       const zip = new JSZip();
       
       // Add the required files to the zip
-      const sessionSetupCardContent = `import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+      const bettingBoardCardContent = `import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouletteStore } from "@/store/useRouletteStore";
+import { getAttributesForNumber } from "@/lib/roulette";
+import { RouletteNumber } from "@/lib/types";
 
-export function SessionSetupCard() {
-  return (
-    <Card className="bg-white rounded-lg shadow">
-      <CardContent className="p-4">
-        <div className="flex flex-wrap items-center gap-4">
-          {/* Strategy Select */}
-          <div className="flex-grow">
-            <Label htmlFor="strategy" className="text-sm font-medium text-gray-700 mb-1 block">
-              Strategy
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full" id="strategy">
-                <SelectValue placeholder="Select Strategy" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="none">No Strategy</SelectItem>
-                  <SelectItem value="martingale">Martingale</SelectItem>
-                  <SelectItem value="fibonacci">Fibonacci</SelectItem>
-                  <SelectItem value="dalembert">D'Alembert</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+export function BettingBoardCard() {
+  const { selectedChipValue, addBet } = useRouletteStore();
 
-          {/* Account Type Select */}
-          <div>
-            <Label htmlFor="accountType" className="text-sm font-medium text-gray-700 mb-1 block">
-              Account Type
-            </Label>
-            <Select defaultValue="free">
-              <SelectTrigger className="w-28" id="accountType">
-                <SelectValue placeholder="Account" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="free">Free</SelectItem>
-                  <SelectItem value="real">Real</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+  // Array of numbers for the betting grid (1-36)
+  const numbers: number[] = Array.from({ length: 36 }, (_, i) => 36 - i);
 
-          {/* Bankroll Input */}
-          <div>
-            <Label htmlFor="bankroll" className="text-sm font-medium text-gray-700 mb-1 block">
-              Bankroll
-            </Label>
-            <Input
-              id="bankroll"
-              type="number"
-              placeholder="1000"
-              className="w-24"
-              min={1}
-              max={9999}
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}`;
-
-      const sessionControlsCardContent = `import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-export function SessionControlsCard() {
-  const [autoSpinCount, setAutoSpinCount] = useState<number>(0);
-  const [autoSpinMinutes, setAutoSpinMinutes] = useState<number>(0);
-
-  const handleAutoSpinCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value) || 0;
-    setAutoSpinCount(value);
+  // Function to handle number click
+  const handleNumberClick = (num: RouletteNumber) => {
+    addBet({
+      type: "straight",
+      number: num,
+      amount: selectedChipValue
+    });
   };
 
-  const handleAutoSpinMinutesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value) || 0;
-    setAutoSpinMinutes(value);
+  // Function to handle outside bet click
+  const handleOutsideBetClick = (type: string, numbers: number[]) => {
+    addBet({
+      type,
+      numbers,
+      amount: selectedChipValue
+    });
+  };
+
+  // Function to get color classes
+  const getColorClasses = (num: number) => {
+    const { color } = getAttributesForNumber(num);
+    return color === 'red' ? 'bg-red-700' : color === 'black' ? 'bg-black' : 'bg-green-700';
   };
 
   return (
-    <Card className="bg-white rounded-lg shadow">
-      <CardContent className="p-4">
-        <div className="space-y-4">
-          {/* Button Row */}
-          <div className="flex space-x-2">
-            <Button 
-              variant="default" 
-              className="bg-green-600 hover:bg-green-700 text-white"
+    <Card>
+      <CardHeader>
+        <CardTitle>Betting Board</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="w-full bg-green-600 p-4 rounded-lg">
+          {/* Main betting grid */}
+          <div className="grid grid-cols-13 gap-1">
+            {/* 0 cell */}
+            <div className="row-span-3 flex items-center">
+              <div 
+                className="bg-green-700 text-white h-36 w-full rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
+                onClick={() => handleNumberClick(0)}
+              >
+                0
+              </div>
+            </div>
+            
+            {/* Numbers 1-36 */}
+            <div className="col-span-12">
+              <div className="grid grid-cols-12 gap-1">
+                {numbers.map((num) => (
+                  <div
+                    key={num}
+                    className={\`\${getColorClasses(num)} text-white h-12 rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80\`}
+                    onClick={() => handleNumberClick(num)}
+                  >
+                    {num}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Dozens */}
+          <div className="grid grid-cols-3 gap-1 mt-1">
+            {[1, 2, 3].map((dozen) => (
+              <div
+                key={\`dozen-\${dozen}\`}
+                className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+                onClick={() => handleOutsideBetClick(
+                  'dozen',
+                  Array.from({ length: 12 }, (_, i) => i + 1 + (dozen - 1) * 12)
+                )}
+              >
+                {dozen === 1 ? '1st 12' : dozen === 2 ? '2nd 12' : '3rd 12'}
+              </div>
+            ))}
+          </div>
+
+          {/* Outside bets */}
+          <div className="grid grid-cols-6 gap-1 mt-1">
+            <div
+              className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick(
+                'low',
+                Array.from({ length: 18 }, (_, i) => i + 1)
+              )}
             >
-              Start Session
-            </Button>
-            <Button variant="destructive">End Session</Button>
+              1-18
+            </div>
+            <div
+              className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick('even', [])}
+            >
+              EVEN
+            </div>
+            <div
+              className="bg-red-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick('red', [])}
+            >
+              RED
+            </div>
+            <div
+              className="bg-black text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick('black', [])}
+            >
+              BLACK
+            </div>
+            <div
+              className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick('odd', [])}
+            >
+              ODD
+            </div>
+            <div
+              className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+              onClick={() => handleOutsideBetClick(
+                'high',
+                Array.from({ length: 18 }, (_, i) => i + 19)
+              )}
+            >
+              19-36
+            </div>
           </div>
 
-          {/* Auto Spin Config */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="autoSpins" className="text-sm font-medium text-gray-700 mb-1 block">
-                Auto Spins
-              </Label>
-              <Input
-                id="autoSpins"
-                type="number"
-                placeholder="100"
-                value={autoSpinCount || ''}
-                onChange={handleAutoSpinCountChange}
-                min={0}
-              />
-            </div>
-            <div>
-              <Label htmlFor="duration" className="text-sm font-medium text-gray-700 mb-1 block">
-                Duration (mins)
-              </Label>
-              <Input
-                id="duration"
-                type="number"
-                placeholder="5"
-                value={autoSpinMinutes || ''}
-                onChange={handleAutoSpinMinutesChange}
-                min={0}
-              />
-            </div>
+          {/* Columns */}
+          <div className="grid grid-cols-3 gap-1 mt-1">
+            {[1, 2, 3].map((col) => (
+              <div
+                key={\`col-\${col}\`}
+                className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+                onClick={() => handleOutsideBetClick(
+                  'column',
+                  Array.from({ length: 12 }, (_, i) => i * 3 + col)
+                )}
+              >
+                Column {col}
+              </div>
+            ))}
           </div>
         </div>
       </CardContent>
@@ -157,61 +166,76 @@ export function SessionControlsCard() {
   );
 }`;
 
-      const useSessionStoreContent = `import { create } from 'zustand';
+      const rouletteTypesContent = `export type RouletteNumber = number | '00';
+export type RouletteColor = 'red' | 'black' | 'green';
 
-interface SessionState {
-  autoSpinCount: number;
-  autoSpinMinutes: number;
-  setAutoSpinCount: (count: number) => void;
-  setAutoSpinMinutes: (minutes: number) => void;
+export interface SpinResult {
+  number: RouletteNumber;
+  color: RouletteColor;
+  isEven: boolean;
+  isLow: boolean;
 }
 
-export const useSessionStore = create<SessionState>((set) => ({
-  autoSpinCount: 0,
-  autoSpinMinutes: 0,
-  setAutoSpinCount: (count) => set({ autoSpinCount: count }),
-  setAutoSpinMinutes: (minutes) => set({ autoSpinMinutes: minutes })
+export type ChipValue = 1 | 5 | 10 | 25 | 100 | 500 | 1000;
+
+export interface Bet {
+  id: string;
+  type: string;
+  number?: RouletteNumber;
+  numbers?: number[];
+  amount: number;
+}`;
+
+      const rouletteStoreContent = `import { create } from 'zustand';
+import type { ChipValue, Bet, SpinResult } from '@/lib/types';
+
+interface RouletteState {
+  selectedChipValue: ChipValue;
+  placedBets: Bet[];
+  spinResults: SpinResult[];
+  setSelectedChipValue: (value: ChipValue) => void;
+  addBet: (bet: Omit<Bet, 'id'>) => void;
+  clearBets: () => void;
+  addSpinResult: (number: number | '00') => void;
+  clearSpinResults: () => void;
+}
+
+export const useRouletteStore = create<RouletteState>((set) => ({
+  selectedChipValue: 1,
+  placedBets: [],
+  spinResults: [],
+  setSelectedChipValue: (value) => set({ selectedChipValue: value }),
+  addBet: (bet) => set((state) => ({
+    placedBets: [...state.placedBets, { ...bet, id: crypto.randomUUID() }]
+  })),
+  clearBets: () => set({ placedBets: [] }),
+  addSpinResult: (number) => set((state) => {
+    const color = number === 0 || number === '00' ? 'green' : 
+      [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number as number) ? 'red' : 'black';
+    const numValue = typeof number === 'number' ? number : 0;
+    const result: SpinResult = {
+      number,
+      color,
+      isEven: numValue > 0 && numValue % 2 === 0,
+      isLow: numValue >= 1 && numValue <= 18
+    };
+    return {
+      spinResults: [result, ...state.spinResults].slice(0, 20)
+    };
+  }),
+  clearSpinResults: () => set({ spinResults: [] })
 }));`;
 
-      const appTsxContent = `
-import { SessionSetupCard } from './components/SessionSetupCard';
-import { SessionControlsCard } from './components/SessionControlsCard';
-import { BettingBoardCard } from './components/BettingBoardCard';
-import { BetControlsCard } from './components/BetControlsCard';
-import { ActiveBetsCard } from './components/ActiveBetsCard';
-import { LastResultsCard } from './components/LastResultsCard';
-import { StrategyInjectionCard } from './components/StrategyInjectionCard';
-import { SessionSpinHistoryCard } from './components/SessionSpinHistoryCard';
-
-function App() {
-  return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6 bg-gray-50 min-h-screen">
-      <SessionSetupCard />
-      <SessionControlsCard />
-      <BetControlsCard />
-      <BettingBoardCard />
-      <ActiveBetsCard />
-      <LastResultsCard />
-      <SessionSpinHistoryCard />
-      <StrategyInjectionCard />
-    </div>
-  );
-}
-
-export default App;
-`;
-
       // Add files to the zip
-      zip.file("SessionSetupCard.tsx", sessionSetupCardContent);
-      zip.file("SessionControlsCard.tsx", sessionControlsCardContent);
-      zip.file("useSessionStore.ts", useSessionStoreContent);
-      zip.file("App.tsx", appTsxContent);
+      zip.file("BettingBoardCard.tsx", bettingBoardCardContent);
+      zip.file("types.ts", rouletteTypesContent);
+      zip.file("useRouletteStore.ts", rouletteStoreContent);
       
       // Generate the zip
       const content = await zip.generateAsync({ type: "blob" });
       
       // Save the zip file
-      saveAs(content, "cr6-files.zip");
+      saveAs(content, "cr7-files.zip");
     } catch (error) {
       console.error("Error downloading files:", error);
       alert("Failed to download files. See console for details.");
