@@ -1,26 +1,17 @@
-
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useRouletteStore } from '@/store/useRouletteStore';
-import type { RouletteColor } from '@/lib/types';
 
 export const LastResultsCard = () => {
   const [number, setNumber] = useState('');
-  const [color, setColor] = useState<RouletteColor>('red');
   const { addSpinResult, spinResults } = useRouletteStore();
 
   const handleSubmit = () => {
     const parsedNumber = parseInt(number, 10);
     if ((parsedNumber >= 0 && parsedNumber <= 36) || number === '00') {
-      addSpinResult({
-        number: number === '00' ? '00' : parsedNumber,
-        color,
-        isEven: parsedNumber % 2 === 0,
-        isLow: parsedNumber <= 18
-      });
+      addSpinResult(number === '00' ? '00' : parsedNumber);
       setNumber('');
     }
   };
@@ -39,19 +30,9 @@ export const LastResultsCard = () => {
               onChange={(e) => setNumber(e.target.value)}
               className="w-32"
             />
-            <Select value={color} onValueChange={(val) => setColor(val as RouletteColor)}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="red">Red</SelectItem>
-                <SelectItem value="black">Black</SelectItem>
-                <SelectItem value="green">Green</SelectItem>
-              </SelectContent>
-            </Select>
             <Button onClick={handleSubmit}>Add Result</Button>
           </div>
-          
+
           <div className="flex gap-2">
             {spinResults.slice(0, 5).map((result, idx) => (
               <div
