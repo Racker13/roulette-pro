@@ -1,0 +1,93 @@
+CR2 — Component Layout & Simulator State
+Purpose: Establish a modular card-based layout and central simulator state hook. This will set up the visual structure of the Free Play Simulator and connect it to core spin and bet logic defined in CR1.
+
+✅ Files to Add
+📁 /src/components/
+Create the following card components (initially just stubs with visible headings for layout testing):
+
+tsx
+Copy
+Edit
+// Example: TopGroupCard.tsx
+export const TopGroupCard = () => (
+  <div className="bg-white rounded p-4 shadow mb-4">Top Group Card</div>
+);
+Repeat this for:
+
+TopGroupCard.tsx
+
+BettingBoardCard.tsx
+
+BetControlsCard.tsx
+
+ActiveBetsCard.tsx
+
+LastResultsCard.tsx
+
+StrategyInjectionCard.tsx
+
+SessionSpinHistoryCard.tsx
+
+📁 /src/hooks/useSimulator.ts
+Create a new React hook to centralize simulator state:
+
+ts
+Copy
+Edit
+import { useState } from 'react';
+
+export function useSimulator() {
+  const [bankroll, setBankroll] = useState(1000);
+  const [activeBets, setActiveBets] = useState<any[]>([]);
+  const [spinHistory, setSpinHistory] = useState<any[]>([]);
+
+  const placeBet = (target: string | number, amount: number) => {
+    setActiveBets([...activeBets, { target, amount }]);
+  };
+
+  const resetBets = () => setActiveBets([]);
+
+  return {
+    bankroll,
+    setBankroll,
+    activeBets,
+    setActiveBets,
+    placeBet,
+    resetBets,
+    spinHistory,
+    setSpinHistory
+  };
+}
+🧩 Update /src/App.tsx to Mount All Cards (Top → Bottom)
+tsx
+Copy
+Edit
+import { TopGroupCard } from './components/TopGroupCard';
+import { BettingBoardCard } from './components/BettingBoardCard';
+import { BetControlsCard } from './components/BetControlsCard';
+import { ActiveBetsCard } from './components/ActiveBetsCard';
+import { LastResultsCard } from './components/LastResultsCard';
+import { StrategyInjectionCard } from './components/StrategyInjectionCard';
+import { SessionSpinHistoryCard } from './components/SessionSpinHistoryCard';
+
+function App() {
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-4 bg-gray-50 min-h-screen">
+      <TopGroupCard />
+      <BettingBoardCard />
+      <BetControlsCard />
+      <ActiveBetsCard />
+      <LastResultsCard />
+      <StrategyInjectionCard />
+      <SessionSpinHistoryCard />
+    </div>
+  );
+}
+
+export default App;
+📌 Layout Notes
+Card order matches your design exactly: top group, board, controls, bets, result, strategy (optional), history.
+
+Strategy card is mounted but logic can hide it until active.
+
+Each card is currently just a placeholder so UI can be styled and wired incrementally.
