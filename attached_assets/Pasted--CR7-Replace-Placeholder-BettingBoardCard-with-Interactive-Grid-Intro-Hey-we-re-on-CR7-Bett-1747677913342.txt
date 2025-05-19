@@ -1,0 +1,120 @@
+🎯 CR7 – Replace Placeholder BettingBoardCard with Interactive Grid
+👋 Intro
+Hey, we’re on CR7: BettingBoardCard in our modular React + TS app.
+
+We need you to replace the current placeholder BettingBoardCard with a fully interactive roulette betting grid, including support for inside and outside bets. Please read everything below carefully — you have what you need to do this cleanly.
+
+🧠 App Setup & Constraints
+React + TypeScript
+
+Zustand for state management
+
+Tailwind CSS (with shadcn/ui components)
+
+❌ No Firebase or auto-saving
+
+✅ Local-only state, using working Zustand store
+
+✅ Component should live in BettingBoardCard.tsx
+
+🧩 Zustand Store
+These are already implemented and working — use them:
+
+ts
+Copy
+Edit
+selectedChipValue: number;
+placedBets: Bet[];
+spinResults: SpinResult[];
+autoSpinCount: number;
+autoSpinMinutes: number;
+
+addSpinResult(): void;
+clearBets(): void;
+exportSession(): string;
+✅ To place a bet: call addBet(betObj) to push to placedBets[].
+
+🔍 Utility Function Available
+✅ Use /utils/getAttributesForNumber.ts
+It exposes:
+
+ts
+Copy
+Edit
+getAttributesForNumber(number: number): {
+  color: 'red' | 'black' | 'green';
+  isEven: boolean;
+  isOdd: boolean;
+  dozen: 1 | 2 | 3 | null;
+  column: 1 | 2 | 3 | null;
+  isLow: boolean;
+  isHigh: boolean;
+}
+🔧 Do not hardcode logic for red/black, odd/even, dozens, columns, etc.
+Instead, use this function in all relevant places — including tile styling and bet detection.
+
+📐 Component Requirements
+📦 Basic Structure
+Use shadcn/ui:
+
+tsx
+Copy
+Edit
+<Card>
+  <CardHeader>
+    <CardTitle>Betting Board</CardTitle>
+  </CardHeader>
+  <CardContent>
+    {/* Inside + outside betting grid */}
+  </CardContent>
+</Card>
+🎯 Inside Bet Grid
+3 rows x 12 columns for numbers 1–36
+
+Row-major: bottom = 1–2–3 → top = 34–35–36
+
+Zero (0) placed to the left side, centered vertically
+
+Each number tile should:
+
+Use getAttributesForNumber(n).color to style
+
+Call addBet({ type: 'single', numbers: [n], amount: selectedChipValue }) on click
+
+🎯 Outside Bet Zones
+Add clickable areas for these bet types:
+
+Label	Type	Numbers Affected
+1st 12	dozen	[1–12]
+2nd 12	dozen	[13–24]
+3rd 12	dozen	[25–36]
+Column 1–3	column	[every 3rd starting from 1, 2, or 3]
+Red / Black	color	use getAttributesForNumber(n).color
+Odd / Even	parity	use isOdd / isEven
+1 to 18	low	[1–18]
+19 to 36	high	[19–36]
+
+When clicked, each region should call:
+
+ts
+Copy
+Edit
+addBet({
+  type: 'outside', // or 'dozen', 'column', etc. depending on zone
+  numbers: [affected numbers],
+  amount: selectedChipValue
+});
+🖼 Visual Reference
+Here’s the design layout to mimic:
+📎 /mnt/data/e657dc36-5bc8-46f8-ad6c-c48afcaf78c3.png
+
+✅ Final Notes
+Reuse the getAttributesForNumber() utility for both logic and styling
+
+Do not use Firebase, auto-save, or localStorage
+
+Stick to this naming: BettingBoardCard.tsx
+
+Reach out if any part of Zustand state or chip logic is unclear
+
+Let me know when this is ready, and I’ll help test interactions or add overlays for corners, splits, etc.
