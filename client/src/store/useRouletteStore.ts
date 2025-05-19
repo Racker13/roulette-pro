@@ -14,7 +14,11 @@ interface RouletteState {
   selectedChipValue: ChipValue;
   placedBets: Bet[];
   spinResults: SpinResult[];
+  autoSpinCount: number;
+  autoSpinMinutes: number;
   setSelectedChipValue: (value: ChipValue) => void;
+  setAutoSpinCount: (count: number) => void;
+  setAutoSpinMinutes: (minutes: number) => void;
   addBet: (bet: Omit<Bet, 'id'>) => void;
   clearBets: () => void;
   addSpinResult: (number: number | '00') => void;
@@ -26,6 +30,10 @@ export const useRouletteStore = create<RouletteState>((set, get) => ({
   selectedChipValue: 1,
   placedBets: [],
   spinResults: [],
+  autoSpinCount: 0,
+  autoSpinMinutes: 0,
+  setAutoSpinCount: (count) => set({ autoSpinCount: count }),
+  setAutoSpinMinutes: (minutes) => set({ autoSpinMinutes: minutes }),
   setSelectedChipValue: (value) => set({ selectedChipValue: value }),
   addBet: (bet) => set((state) => ({
     placedBets: [...state.placedBets, { ...bet, id: crypto.randomUUID() }]

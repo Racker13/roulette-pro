@@ -5,8 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Separator } from "./ui/separator"
+import { useRouletteStore } from "@/store/useRouletteStore"
 
 export const SessionSetupCard = () => {
+  const { autoSpinCount, autoSpinMinutes, setAutoSpinCount, setAutoSpinMinutes } = useRouletteStore();
+
   return (
     <Card>
       <CardHeader>
@@ -51,19 +54,30 @@ export const SessionSetupCard = () => {
           />
         </div>
 
-        <Separator className="my 4" />
+        <Separator className="my-4" />
         
-        <div className="space-y-2 opacity-60">
-          <div className="text-sm font-medium mb-2">Auto-Spin (Coming Soon)</div>
+        <div className="space-y-2">
+          <div className="text-sm font-medium mb-2">Auto-Spin Configuration</div>
           <div className="flex gap-4">
             <div className="flex-1">
-              <Input disabled type="number" placeholder="Number of spins" />
+              <Input 
+                type="number" 
+                placeholder="Number of spins"
+                value={autoSpinCount || ''}
+                onChange={(e) => setAutoSpinCount(parseInt(e.target.value) || 0)}
+                min={0}
+              />
             </div>
             <div className="flex-1">
-              <Input disabled type="number" placeholder="Minutes to run" />
+              <Input 
+                type="number" 
+                placeholder="Minutes to run"
+                value={autoSpinMinutes || ''}
+                onChange={(e) => setAutoSpinMinutes(parseInt(e.target.value) || 0)}
+                min={0}
+              />
             </div>
           </div>
-          <Button className="w-full" disabled>Start Auto-Spin</Button>
         </div>
       </CardContent>
     </Card>
