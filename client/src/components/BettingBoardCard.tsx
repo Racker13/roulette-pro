@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouletteStore } from "@/store/useRouletteStore";
-import { getAttributesForNumber } from "@/lib/roulette";
+import { getAttributesForNumber } from "@/utils/getAttributesForNumber";
 import { RouletteNumber } from "@/lib/types";
 
 export function BettingBoardCard() {
