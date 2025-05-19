@@ -43,7 +43,7 @@ export function BettingBoardCard() {
           <div className="grid grid-cols-[auto_repeat(12,_minmax(0,_1fr))] gap-1">
             {/* Zero */}
             <div 
-              className="row-span-3 col-span-1 bg-green-700 text-white h-full rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
+              className="row-span-3 w-12 bg-green-700 text-white h-full rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
               onClick={() => handleNumberClick(0)}
             >
               0
