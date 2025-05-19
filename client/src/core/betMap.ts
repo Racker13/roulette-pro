@@ -12,7 +12,7 @@ export const BET_TARGET_MAP: Record<string | number, string> = {
   'Column 1': 'column',
   'Column 2': 'column',
   'Column 3': 'column',
-  // All individual numbers
+  // All individual numbers as straight bets
   ...Object.fromEntries(Array.from({ length: 37 }, (_, i) => [i, 'straight'])),
-  37: 'basket', // for 00 in American (optional for future)
+  37: 'basket', // For 00 (American use)
 };
