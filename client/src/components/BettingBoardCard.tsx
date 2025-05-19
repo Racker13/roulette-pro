@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
@@ -47,7 +46,7 @@ export function BettingBoardCard() {
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Place bets on numbers, colors, or other combinations</p>
+                <p>BettingBoardCard</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -79,7 +78,7 @@ export function BettingBoardCard() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Middle row: 2, 5, 8, ..., 35 */}
                 <div className="grid grid-cols-12 gap-1">
                   {[2,5,8,11,14,17,20,23,26,29,32,35].map((num) => (
@@ -92,7 +91,7 @@ export function BettingBoardCard() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Bottom row: 1, 4, 7, ..., 34 */}
                 <div className="grid grid-cols-12 gap-1">
                   {[1,4,7,10,13,16,19,22,25,28,31,34].map((num) => (
