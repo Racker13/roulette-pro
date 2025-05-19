@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "wouter";
 import { Dice5 } from "lucide-react";
 import ExportProjectButton from "@/components/ExportProjectButton";
+import CR6ZipExporter from "@/components/cr6-zip-exporter";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -43,6 +44,7 @@ export default function Layout({ children }: LayoutProps) {
             <p className="text-sm text-gray-500">Roulette Simulator © {new Date().getFullYear()} - Free Play Mode</p>
             <div className="flex items-center space-x-4">
               <ExportProjectButton />
+              <CR6ZipExporter />
               <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">Help</span>
               <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">About</span>
             </div>
