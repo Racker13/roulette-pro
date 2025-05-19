@@ -40,15 +40,13 @@ export function BettingBoardCard() {
       </CardHeader>
       <CardContent>
         <div className="w-full bg-green-600 p-4 rounded-lg">
-          <div className="grid grid-cols-13 gap-1">
+          <div className="grid grid-cols-[auto_repeat(12,_minmax(0,_1fr))] gap-1">
             {/* Zero */}
-            <div className="row-span-3">
-              <div 
-                className="bg-green-700 text-white h-full rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
-                onClick={() => handleNumberClick(0)}
-              >
-                0
-              </div>
+            <div 
+              className="row-span-3 bg-green-700 text-white h-full rounded-md flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
+              onClick={() => handleNumberClick(0)}
+            >
+              0
             </div>
 
             {/* Main betting grid 1-36 */}
