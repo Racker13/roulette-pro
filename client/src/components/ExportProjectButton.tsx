@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { useToast } from "@/hooks/use-toast";
@@ -172,13 +170,11 @@ export default function ExportProjectButton() {
   };
 
   return (
-    <Button
+    <span 
       onClick={handleExport}
-      disabled={isExporting}
-      className="bg-purple-600 hover:bg-purple-700 text-white flex items-center space-x-2"
+      className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
     >
-      <Download className="h-4 w-4" />
-      <span>{isExporting ? 'Exporting...' : 'Export Project'}</span>
-    </Button>
+      {isExporting ? 'Exporting...' : 'Export Project'}
+    </span>
   );
 }
