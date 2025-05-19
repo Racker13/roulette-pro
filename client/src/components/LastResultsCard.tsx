@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function LastResultsCard() {
-  const lastResults = useRouletteStore(state => state.spinResults.slice(0, 5));
+  const lastResults = useRouletteStore(state => state.spinResults).slice(0, 5);
 
   return (
     <Card className="bg-white rounded-lg shadow">

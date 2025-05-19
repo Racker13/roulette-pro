@@ -6,10 +6,8 @@ import { ClipboardCopy } from "lucide-react";
 import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function SessionSpinHistoryCard() {
-  const { spinResults, placedBets } = useRouletteStore(state => ({
-    spinResults: state.spinResults,
-    placedBets: state.placedBets
-  }));
+  const spinResults = useRouletteStore(state => state.spinResults);
+  const placedBets = useRouletteStore(state => state.placedBets);
 
   const spinHistory = spinResults.map((result, index) => ({
     id: index.toString(),
