@@ -18,7 +18,7 @@ const outsideBets = [
 ];
 
 export const BettingBoardCard = () => {
-  const { placeBet } = useSimulator();
+  const { selectedChipValue, addBet } = useRouletteStore();
 
   const handleBetClick = (target: number | string) => {
     const betType = BET_TARGET_MAP[target];
@@ -26,7 +26,12 @@ export const BettingBoardCard = () => {
       alert('Invalid bet target');
       return;
     }
-    placeBet(target, 1); // hardcoded $1 for now
+    
+    addBet({
+      betType: { type: betType, target },
+      amount: selectedChipValue,
+      displayName: `${betType} - ${target}`
+    });
   };
 
   return (
