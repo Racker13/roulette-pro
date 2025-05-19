@@ -106,6 +106,33 @@ export function BettingBoardCard() {
                 </div>
               </div>
             </div>
+
+             <div className="grid grid-rows-3 gap-1 ml-1">
+              <div className="row-start-3">
+                <div
+                  className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+                  onClick={() => handleOutsideBet("column", [1,4,7,10,13,16,19,22,25,28,31,34])}
+                >
+                  2:1
+                </div>
+              </div>
+              <div className="row-start-3">
+                <div
+                  className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+                  onClick={() => handleOutsideBet("column", [2,5,8,11,14,17,20,23,26,29,32,35])}
+                >
+                  2:1
+                </div>
+              </div>
+              <div className="row-start-3">
+                <div
+                  className="bg-green-700 text-white h-12 rounded-md flex items-center justify-center font-medium cursor-pointer hover:opacity-80"
+                  onClick={() => handleOutsideBet("column", [3,6,9,12,15,18,21,24,27,30,33,36])}
+                >
+                  2:1
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Outside bets */}
