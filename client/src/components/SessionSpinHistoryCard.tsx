@@ -1,6 +1,13 @@
 
-import { Card } from './ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 export const SessionSpinHistoryCard = () => (
-  <Card className="p-4">Session Spin History Card</Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>Session History</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-muted-foreground">Detailed session spin history will be displayed here</p>
+    </CardContent>
+  </Card>
 );

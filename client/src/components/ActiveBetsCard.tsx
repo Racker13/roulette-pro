@@ -1,6 +1,13 @@
 
-import { Card } from './ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 export const ActiveBetsCard = () => (
-  <Card className="p-4">Active Bets Card</Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>Active Bets</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-muted-foreground">Current active bets will be displayed here</p>
+    </CardContent>
+  </Card>
 );

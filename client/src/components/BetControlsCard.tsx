@@ -1,6 +1,13 @@
 
-import { Card } from './ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 export const BetControlsCard = () => (
-  <Card className="p-4">Bet Controls Card</Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>Bet Controls</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-muted-foreground">Betting amount and control options will appear here</p>
+    </CardContent>
+  </Card>
 );

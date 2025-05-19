@@ -1,6 +1,13 @@
 
-import { Card } from './ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 export const LastResultsCard = () => (
-  <Card className="p-4">Last Results Card</Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>Last Results</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm text-muted-foreground">Previous spin results will be shown here</p>
+    </CardContent>
+  </Card>
 );
