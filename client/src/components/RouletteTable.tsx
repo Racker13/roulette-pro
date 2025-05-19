@@ -60,15 +60,7 @@ export default function RouletteTable({
 
   return (
     <Card>
-      <div className="p-4 bg-gray-50 border-b">
-        <h2 className="text-lg font-semibold text-gray-900">Place Your Bets</h2>
-      </div>
-      
       <CardContent className="p-4">
-        <ChipSelector 
-          selectedChip={selectedChip} 
-          onChipSelect={setSelectedChip} 
-        />
 
         {/* Roulette Table Layout */}
         <div className="w-full bg-green-600 p-4 rounded-lg select-none">
