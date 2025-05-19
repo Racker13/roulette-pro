@@ -4,6 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function SessionControlsCard() {
   const [autoSpinCount, setAutoSpinCount] = useState<number>(0);

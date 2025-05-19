@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function LastResultsCard() {
   const lastResults = useRouletteStore(state => state.spinResults.slice(0, 5));
