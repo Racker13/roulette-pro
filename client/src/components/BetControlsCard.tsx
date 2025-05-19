@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import type { ChipValue } from '@/lib/types';
 
-const CHIP_VALUES: ChipValue[] = [1, 5, 25, 100, 500];
+const CHIP_VALUES: ChipValue[] = [1, 5, 25, 100];
 
 export const BetControlsCard = () => {
   const [selectedAmount, setSelectedAmount] = useState<ChipValue>(1);
