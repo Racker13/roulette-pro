@@ -50,6 +50,7 @@ export function BettingBoardCard() {
             </TooltipContent>
           </Tooltip>
         </div>
+      </CardHeader>
       <CardContent>
         <div className="w-full bg-green-600 p-4 rounded-lg">
           <div className="grid grid-cols-[auto_repeat(12,_minmax(0,_1fr))] gap-1">
