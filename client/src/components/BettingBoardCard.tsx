@@ -3,6 +3,7 @@ import { getSpinAttributes } from '../core/spinLogic';
 import { BET_TARGET_MAP } from '../core/betMap';
 import { useSimulator } from '../hooks/useSimulator';
 import { Card } from './ui/card';
+import { useRouletteStore } from '@/store/useRouletteStore';
 
 const numberGrid = [
   [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
