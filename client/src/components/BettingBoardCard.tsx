@@ -13,8 +13,8 @@ export function BettingBoardCard() {
   // Function to handle number click
   const handleNumberClick = (num: RouletteNumber) => {
     addBet({
-      type: "straight",
-      number: num,
+      type: "single",
+      numbers: [num],
       amount: selectedChipValue
     });
   };
