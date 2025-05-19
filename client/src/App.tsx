@@ -1,24 +1,23 @@
-import { Switch, Route } from "wouter";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/Home";
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+import { TopGroupCard } from './components/TopGroupCard';
+import { BettingBoardCard } from './components/BettingBoardCard';
+import { BetControlsCard } from './components/BetControlsCard';
+import { ActiveBetsCard } from './components/ActiveBetsCard';
+import { LastResultsCard } from './components/LastResultsCard';
+import { StrategyInjectionCard } from './components/StrategyInjectionCard';
+import { SessionSpinHistoryCard } from './components/SessionSpinHistoryCard';
 
 function App() {
   return (
-    <TooltipProvider>
-      <Toaster />
-      <Router />
-    </TooltipProvider>
+    <div className="max-w-4xl mx-auto p-4 space-y-4 bg-gray-50 min-h-screen">
+      <TopGroupCard />
+      <BettingBoardCard />
+      <BetControlsCard />
+      <ActiveBetsCard />
+      <LastResultsCard />
+      <StrategyInjectionCard />
+      <SessionSpinHistoryCard />
+    </div>
   );
 }
 
