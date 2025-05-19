@@ -225,7 +225,7 @@ export default App;
       size="sm" 
       className="flex items-center"
     >
-      <Download className="mr-2 h-4 w-4" /> CR6 Files
+      <Download className="mr-2 h-4 w-4" /> Zip Download
     </Button>
   );
 }
