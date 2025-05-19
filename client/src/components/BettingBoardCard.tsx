@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useRouletteStore } from "@/store/useRouletteStore";
 import { getAttributesForNumber } from "@/utils/getAttributesForNumber";
 import { RouletteNumber } from "@/lib/types";
@@ -39,16 +39,18 @@ export function BettingBoardCard() {
       <CardHeader className="relative">
         <CardTitle>Betting Board</CardTitle>
         <div className="absolute top-0 left-0 mt-1 ml-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-muted text-muted-foreground text-xs cursor-help">
-                i
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Place bets on numbers, colors, or other combinations</p>
-            </TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-muted text-muted-foreground text-xs cursor-help">
+                  i
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Place bets on numbers, colors, or other combinations</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardHeader>
       <CardContent>
