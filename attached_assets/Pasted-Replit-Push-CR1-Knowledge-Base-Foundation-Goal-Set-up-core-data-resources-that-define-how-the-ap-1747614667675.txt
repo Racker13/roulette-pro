@@ -1,0 +1,91 @@
+Replit Push: CR1 — Knowledge Base Foundation
+Goal: Set up core data resources that define how the app interprets spin results, understands bet types, and calculates payouts.
+
+🧩 Files to Add in /src/core/
+🔹 spinLogic.ts
+ts
+Copy
+Edit
+// spinLogic.ts
+export type SpinAttributes = {
+  number: number;
+  color: 'red' | 'black' | 'green';
+  parity: 'even' | 'odd' | null;
+  dozen: 1 | 2 | 3 | null;
+  column: 1 | 2 | 3 | null;
+  isZero: boolean;
+  highLow: 'low' | 'high' | null;
+};
+
+const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+const BLACK_NUMBERS = new Set([2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35]);
+
+export function getSpinAttributes(n: number): SpinAttributes {
+  const isZero = n === 0;
+  return {
+    number: n,
+    color: isZero ? 'green' : RED_NUMBERS.has(n) ? 'red' : 'black',
+    parity: isZero ? null : (n % 2 === 0 ? 'even' : 'odd'),
+    dozen: isZero ? null : Math.ceil(n / 12) as 1 | 2 | 3,
+    column: isZero ? null : ((n - 1) % 3) + 1 as 1 | 2 | 3,
+    isZero,
+    highLow: isZero ? null : (n <= 18 ? 'low' : 'high'),
+  };
+}
+🔹 payoutRules.ts
+ts
+Copy
+Edit
+// payoutRules.ts
+export type BetPlacement = 'inside' | 'outside';
+
+export interface PayoutRule {
+  payout: number;
+  oddsEU: number | null;
+  oddsUS: number | null;
+  placement: BetPlacement;
+}
+
+export const PAYOUTS: Record<string, PayoutRule> = {
+  straight:  { payout: 35, oddsEU: 2.7, oddsUS: 2.6, placement: 'inside' },
+  split:     { payout: 17, oddsEU: 5.4, oddsUS: 5.3, placement: 'inside' },
+  street:    { payout: 11, oddsEU: 8.1, oddsUS: 7.9, placement: 'inside' },
+  corner:    { payout: 8,  oddsEU: 10.8, oddsUS: 10.5, placement: 'inside' },
+  basket:    { payout: 6,  oddsEU: null, oddsUS: 13.2, placement: 'inside' },
+  sixLine:   { payout: 5,  oddsEU: 16.2, oddsUS: 15.8, placement: 'inside' },
+  column:    { payout: 2,  oddsEU: 32.4, oddsUS: 31.6, placement: 'outside' },
+  dozen:     { payout: 2,  oddsEU: 32.4, oddsUS: 31.6, placement: 'outside' },
+  color:     { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+  evenOdd:   { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+  highLow:   { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+};
+🔹 betMap.ts
+ts
+Copy
+Edit
+// betMap.ts
+export const BET_TARGET_MAP: Record<string | number, string> = {
+  red: 'color',
+  black: 'color',
+  even: 'evenOdd',
+  odd: 'evenOdd',
+  '1 to 18': 'highLow',
+  '19 to 36': 'highLow',
+  '1st 12': 'dozen',
+  '2nd 12': 'dozen',
+  '3rd 12': 'dozen',
+  'Column 1': 'column',
+  'Column 2': 'column',
+  'Column 3': 'column',
+  // All individual numbers
+  ...Object.fromEntries(Array.from({ length: 37 }, (_, i) => [i, 'straight'])),
+  37: 'basket', // for 00 in American (optional for future)
+};
+🔚 Deliverables for CR1
+✅ Full spin result interpreter
+
+✅ Payout ratios + inside/outside classification
+
+✅ Target-to-type map for every common bet
+
+✅ Ready to be used by bet validator, UI grid, strategy engine, and export logic
