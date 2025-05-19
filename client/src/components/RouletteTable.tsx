@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import ChipSelector from "@/components/ChipSelector";
 import ActiveBets from "@/components/ActiveBets";
 import { Bet, ChipValue, RouletteNumber } from "@/lib/types";
-import { getNumberColor } from "@/lib/roulette";
+import { getAttributesForNumber } from "@/lib/roulette";
 
 interface RouletteTableProps {
   selectedChip: ChipValue;
@@ -33,10 +33,9 @@ export default function RouletteTable({
 }: RouletteTableProps) {
   // Function to get the background color for a number
   const getNumberBackground = (num: RouletteNumber) => {
-    if (num === 0 || num === "00") return "bg-green-700";
-    
-    const color = getNumberColor(num);
-    return color === "red" ? "bg-red-700" : "bg-black";
+    const numValue = typeof num === 'number' ? num : 0;
+    const color = getAttributesForNumber(numValue).color;
+    return color === "red" ? "bg-red-700" : color === "black" ? "bg-black" : "bg-green-700";
   };
 
   // Numbers for the roulette wheel
