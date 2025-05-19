@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouletteStore } from "@/store/useRouletteStore";
@@ -53,7 +52,7 @@ export function BettingBoardCard() {
                 0
               </div>
             </div>
-            
+
             {/* Numbers 1-36 */}
             <div className="col-span-12">
               <div className="grid grid-cols-12 gap-1">
