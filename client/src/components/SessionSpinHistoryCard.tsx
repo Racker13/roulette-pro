@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { ClipboardCopy } from "lucide-react";
 
@@ -20,9 +21,25 @@ export function SessionSpinHistoryCard() {
 
   return (
     <Card className="bg-white rounded-lg shadow">
+      <TooltipProvider>
+        <CardHeader className="relative">
+          <CardTitle>Session History</CardTitle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="absolute top-0 left-0 mt-1 ml-1">
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-muted text-muted-foreground text-xs cursor-help">
+                  i
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>View your session's spin and bet history</p>
+            </TooltipContent>
+          </Tooltip>
+        </CardHeader>
+      </TooltipProvider>
       <CardContent className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Session History</h2>
           <Button variant="outline" size="sm" className="flex items-center">
             <ClipboardCopy className="h-4 w-4 mr-1" /> Export
           </Button>
