@@ -16,10 +16,38 @@ export function getRouletteNumbers(): RouletteNumber[] {
   ];
 }
 
+// Number attributes interface
+interface BetAttributes {
+  number: number;
+  color: 'red' | 'black' | 'green';
+  isOdd: boolean;
+  isEven: boolean;
+  isLow: boolean;    // 1–18
+  isHigh: boolean;   // 19–36
+  dozen: 1 | 2 | 3 | null;   // null for 0
+  column: 1 | 2 | 3 | null;  // null for 0
+}
+
 // Define red numbers
-const redNumbers: number[] = [
-  1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36
-];
+const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+
+export const getColorFromNumber = (n: number): 'red' | 'black' | 'green' => {
+  if (n === 0) return 'green';
+  return RED_NUMBERS.has(n) ? 'red' : 'black';
+};
+
+export const getAttributesForNumber = (n: number): BetAttributes => {
+  return {
+    number: n,
+    color: getColorFromNumber(n),
+    isOdd: n !== 0 && n % 2 === 1,
+    isEven: n !== 0 && n % 2 === 0,
+    isLow: n >= 1 && n <= 18,
+    isHigh: n >= 19 && n <= 36,
+    dozen: n === 0 ? null : Math.ceil(n / 12) as 1 | 2 | 3,
+    column: n === 0 ? null : (n % 3 === 1 ? 1 : n % 3 === 2 ? 2 : 3)
+  };
+};
 
 // Define black numbers
 const blackNumbers: number[] = [
