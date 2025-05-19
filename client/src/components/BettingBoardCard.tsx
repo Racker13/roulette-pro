@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { RouletteTable } from "./RouletteTable";
+import RouletteTable from "./RouletteTable";
 
 export function BettingBoardCard() {
   return (
