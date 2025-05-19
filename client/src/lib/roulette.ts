@@ -57,7 +57,7 @@ const blackNumbers: number[] = [
 // Get color of a number
 export function getNumberColor(num: RouletteNumber): RouletteColor {
   if (num === 0 || num === "00") return "green";
-  if (redNumbers.includes(num as number)) return "red";
+  if (RED_NUMBERS.has(num as number)) return "red";
   return "black";
 }
 
