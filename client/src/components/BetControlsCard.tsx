@@ -1,12 +1,29 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
 export function BetControlsCard() {
   return (
     <Card className="bg-white rounded-lg shadow">
+      <TooltipProvider>
+        <CardHeader className="relative">
+          <CardTitle>Bet Controls</CardTitle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="absolute top-0 left-0 mt-1 ml-1">
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-muted text-muted-foreground text-xs cursor-help">
+                  i
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Control your bet amounts and actions</p>
+            </TooltipContent>
+          </Tooltip>
+        </CardHeader>
+      </TooltipProvider>
       <CardContent className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Bet Controls</h2>
         
         <div className="grid grid-cols-5 gap-2">
           {[1, 5, 25, 100, 500].map(value => (
