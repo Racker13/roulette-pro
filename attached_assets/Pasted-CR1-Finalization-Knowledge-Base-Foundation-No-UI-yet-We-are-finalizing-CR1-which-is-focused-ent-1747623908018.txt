@@ -1,0 +1,71 @@
+CR1 Finalization — Knowledge Base Foundation (No UI yet)
+We are finalizing CR1, which is focused entirely on the logic foundation — no UI components, no layout, and no cards yet.
+
+✅ What to Confirm or Fix in Replit:
+✅ spinLogic.ts
+
+Already correct — no changes needed.
+
+🔁 payoutRules.ts
+
+Must include all bet types, each with:
+
+payout
+
+oddsEU
+
+oddsUS
+
+placement (either "inside" or "outside")
+
+Please replace current content with this full version:
+
+ts
+Copy
+Edit
+export type BetPlacement = 'inside' | 'outside';
+
+export interface PayoutRule {
+  payout: number;
+  oddsEU: number | null;
+  oddsUS: number | null;
+  placement: BetPlacement;
+}
+
+export const PAYOUTS: Record<string, PayoutRule> = {
+  straight:  { payout: 35, oddsEU: 2.7, oddsUS: 2.6, placement: 'inside' },
+  split:     { payout: 17, oddsEU: 5.4, oddsUS: 5.3, placement: 'inside' },
+  street:    { payout: 11, oddsEU: 8.1, oddsUS: 7.9, placement: 'inside' },
+  corner:    { payout: 8,  oddsEU: 10.8, oddsUS: 10.5, placement: 'inside' },
+  basket:    { payout: 6,  oddsEU: null, oddsUS: 13.2, placement: 'inside' },
+  sixLine:   { payout: 5,  oddsEU: 16.2, oddsUS: 15.8, placement: 'inside' },
+  column:    { payout: 2,  oddsEU: 32.4, oddsUS: 31.6, placement: 'outside' },
+  dozen:     { payout: 2,  oddsEU: 32.4, oddsUS: 31.6, placement: 'outside' },
+  color:     { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+  evenOdd:   { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+  highLow:   { payout: 1,  oddsEU: 48.65, oddsUS: 47.37, placement: 'outside' },
+};
+🆕 betMap.ts
+
+Please create /src/core/betMap.ts with this content:
+
+ts
+Copy
+Edit
+export const BET_TARGET_MAP: Record<string | number, string> = {
+  red: 'color',
+  black: 'color',
+  even: 'evenOdd',
+  odd: 'evenOdd',
+  '1 to 18': 'highLow',
+  '19 to 36': 'highLow',
+  '1st 12': 'dozen',
+  '2nd 12': 'dozen',
+  '3rd 12': 'dozen',
+  'Column 1': 'column',
+  'Column 2': 'column',
+  'Column 3': 'column',
+  // All individual numbers as straight bets
+  ...Object.fromEntries(Array.from({ length: 37 }, (_, i) => [i, 'straight'])),
+  37: 'basket', // For 00 (American use)
+};
