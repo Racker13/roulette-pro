@@ -20,7 +20,6 @@ export function BettingBoardCard() {
   return (
     <Card className="bg-white rounded-lg shadow">
       <CardContent className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Betting Board</h2>
         <RouletteTable
           selectedChip={selectedChip}
           setSelectedChip={setSelectedChip}
