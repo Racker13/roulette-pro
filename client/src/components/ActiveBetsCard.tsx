@@ -1,13 +1,13 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function ActiveBetsCard() {
-  // Placeholder for active bets
-  const activeBets = [
-    { id: '1', type: 'Red', amount: 5 },
-    { id: '2', type: 'Number 17', amount: 1 }
-  ];
+  const placedBets = useRouletteStore(state => state.placedBets);
+  const clearBets = useRouletteStore(state => state.clearBets);
 
   const getChipBgColor = (amount: number) => {
     if (amount === 1) return "bg-red-100 text-red-800";
@@ -31,17 +31,15 @@ export function ActiveBetsCard() {
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>ActiveBetsCard</p>
+              <p>Active bets for the current spin</p>
             </TooltipContent>
           </Tooltip>
         </CardHeader>
       </TooltipProvider>
       <CardContent className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Active Bets</h2>
-        
-        {activeBets.length > 0 ? (
+        {placedBets.length > 0 ? (
           <div className="space-y-2">
-            {activeBets.map((bet) => (
+            {placedBets.map((bet) => (
               <div 
                 key={bet.id} 
                 className="flex justify-between items-center text-sm p-2 bg-gray-50 rounded border border-gray-200"
@@ -52,10 +50,19 @@ export function ActiveBetsCard() {
                 </span>
               </div>
             ))}
-            <div className="mt-3 flex justify-between">
+            <div className="mt-3 flex justify-between items-center">
               <span className="text-sm font-medium">Total Bet Amount:</span>
-              <span className="text-sm font-bold">$6</span>
+              <span className="text-sm font-bold">
+                ${placedBets.reduce((sum, bet) => sum + bet.amount, 0)}
+              </span>
             </div>
+            <Button 
+              variant="outline" 
+              className="w-full mt-2"
+              onClick={clearBets}
+            >
+              Clear Bets
+            </Button>
           </div>
         ) : (
           <div className="text-gray-400 text-sm p-4 text-center">No active bets</div>
