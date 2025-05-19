@@ -16,6 +16,7 @@ interface RouletteState {
   spinResults: SpinResult[];
   autoSpinCount: number;
   autoSpinMinutes: number;
+  sessionId: string | null;
   setSelectedChipValue: (value: ChipValue) => void;
   setAutoSpinCount: (count: number) => void;
   setAutoSpinMinutes: (minutes: number) => void;
@@ -24,9 +25,12 @@ interface RouletteState {
   addSpinResult: (number: number | '00') => void;
   clearSpinResults: () => void;
   exportSession: () => string;
+  startSession: () => void;
+  reset: () => void;
 }
 
 export const useRouletteStore = create<RouletteState>((set, get) => ({
+  sessionId: null,
   selectedChipValue: 1,
   placedBets: [],
   spinResults: [],
@@ -57,5 +61,17 @@ export const useRouletteStore = create<RouletteState>((set, get) => ({
     placedBets: get().placedBets,
     spinResults: get().spinResults,
     timestamp: new Date().toISOString()
-  }, null, 2)
+  }, null, 2),
+
+  startSession: () => set(() => ({
+    sessionId: `session-${Date.now()}`,
+    spinResults: [],
+    placedBets: []
+  })),
+
+  reset: () => set(() => ({
+    placedBets: [],
+    spinResults: [],
+    sessionId: null
+  }))
 }));
