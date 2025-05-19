@@ -45,10 +45,16 @@ export function SessionControlsCard() {
             <Button 
               variant="default" 
               className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={() => useRouletteStore.getState().startSession()}
             >
               Start Session
             </Button>
-            <Button variant="destructive">End Session</Button>
+            <Button 
+              variant="destructive"
+              onClick={() => useRouletteStore.getState().reset()}
+            >
+              End Session
+            </Button>
           </div>
 
           {/* Auto Spin Config */}

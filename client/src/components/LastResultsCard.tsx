@@ -3,14 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 export function LastResultsCard() {
-  // Placeholder for last results
-  const lastResults = [
-    { number: 17, color: 'black' },
-    { number: 36, color: 'red' },
-    { number: 0, color: 'green' },
-    { number: 22, color: 'black' },
-    { number: 9, color: 'red' },
-  ];
+  const lastResults = useRouletteStore(state => state.spinResults.slice(0, 5));
 
   return (
     <Card className="bg-white rounded-lg shadow">

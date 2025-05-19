@@ -5,11 +5,20 @@ import { Button } from "@/components/ui/button";
 import { ClipboardCopy } from "lucide-react";
 
 export function SessionSpinHistoryCard() {
-  // Placeholder for session spin history
-  const spinHistory = [
-    { id: '1', number: 17, color: 'black', bet: 'Red', amount: 5, winAmount: -5, timestamp: new Date() },
-    { id: '2', number: 36, color: 'red', bet: 'Number 17', amount: 1, winAmount: -1, timestamp: new Date() },
-  ];
+  const { spinResults, placedBets } = useRouletteStore(state => ({
+    spinResults: state.spinResults,
+    placedBets: state.placedBets
+  }));
+
+  const spinHistory = spinResults.map((result, index) => ({
+    id: index.toString(),
+    number: result.number,
+    color: result.color,
+    bet: placedBets.length > 0 ? placedBets[0].displayName : 'No bet',
+    amount: placedBets.length > 0 ? placedBets[0].amount : 0,
+    winAmount: 0, // Simplified for now
+    timestamp: new Date()
+  }));
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
