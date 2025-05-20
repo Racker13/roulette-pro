@@ -63,9 +63,7 @@ export function BetControlsCard() {
             className="bg-green-600 hover:bg-green-700 text-white"
             onClick={() => {
               const result = Math.floor(Math.random() * 37);
-              const store = useRouletteStore.getState();
-              store.clearBets(); // Clear bets first
-              store.addSpinResult(result); 
+              useRouletteStore.getState().addSpinResult(result);
             }}
           >
             Spin
