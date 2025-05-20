@@ -61,10 +61,7 @@ export function BetControlsCard() {
           </div>
           <Button 
             className="bg-green-600 hover:bg-green-700 text-white"
-            onClick={() => {
-              const result = Math.floor(Math.random() * 37);
-              useRouletteStore.getState().addSpinResult(result);
-            }}
+            onClick={() => useRouletteStore.getState().addSpinResult(Math.floor(Math.random() * 37))}
           >
             Spin
           </Button>
