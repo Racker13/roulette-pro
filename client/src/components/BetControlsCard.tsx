@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
@@ -5,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { useRouletteStore } from "@/store/useRouletteStore";
 
 export function BetControlsCard() {
+  const selectedChip = useRouletteStore(state => state.selectedChipValue);
+  const setSelectedChip = useRouletteStore(state => state.setSelectedChipValue);
+
   return (
     <Card className="bg-white rounded-lg shadow">
       <TooltipProvider>
@@ -30,7 +34,8 @@ export function BetControlsCard() {
           {[1, 5, 25, 100, 500].map(value => (
             <button
               key={`chip-${value}`}
-              aria-pressed={useRouletteStore(state => state.selectedChipValue === value)}
+              onClick={() => setSelectedChip(value)}
+              aria-pressed={selectedChip === value}
               className={`h-12 w-12 rounded-full font-bold text-sm flex items-center justify-center mx-auto transition-transform active:scale-95
                 ${value === 1 ? 'bg-red-100 border-2 border-red-300 text-red-700' : 
                 value === 5 ? 'bg-green-100 border-2 border-green-300 text-green-700' :
@@ -46,14 +51,20 @@ export function BetControlsCard() {
         
         <div className="flex justify-between mt-4">
           <div className="space-x-2">
-            <Button variant="outline">Clear Bets</Button>
-            <Button variant="outline">Double Bets</Button>
+            <Button variant="outline" onClick={() => useRouletteStore.getState().clearBets()}>
+              Clear Bets
+            </Button>
+            <Button variant="outline" disabled>
+              {/* TODO: Implement Double Bets */}
+              Double Bets
+            </Button>
           </div>
           <Button 
             className="bg-green-600 hover:bg-green-700 text-white"
             onClick={() => {
               const result = Math.floor(Math.random() * 37);
-              useRouletteStore.getState().addSpinResult(result);
+              const store = useRouletteStore.getState();
+              store.addSpinResult(result); // This already clears bets
             }}
           >
             Spin
