@@ -30,7 +30,8 @@ export function BetControlsCard() {
           {[1, 5, 25, 100, 500].map(value => (
             <button
               key={`chip-${value}`}
-              className={`h-12 w-12 rounded-full font-bold text-sm flex items-center justify-center mx-auto
+              aria-pressed={useRouletteStore(state => state.selectedChipValue === value)}
+              className={`h-12 w-12 rounded-full font-bold text-sm flex items-center justify-center mx-auto transition-transform active:scale-95
                 ${value === 1 ? 'bg-red-100 border-2 border-red-300 text-red-700' : 
                 value === 5 ? 'bg-green-100 border-2 border-green-300 text-green-700' :
                 value === 25 ? 'bg-blue-100 border-2 border-blue-300 text-blue-700' :

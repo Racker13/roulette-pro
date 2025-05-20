@@ -48,7 +48,25 @@ export function SessionSpinHistoryCard() {
       </TooltipProvider>
       <CardContent className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <Button variant="outline" size="sm" className="flex items-center">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex items-center"
+            onClick={async () => {
+              const exportData = JSON.stringify({
+                spinResults,
+                sessionProfit: useRouletteStore.getState().sessionProfit,
+                timestamp: new Date().toISOString()
+              }, null, 2);
+              
+              await navigator.clipboard.writeText(exportData);
+              toast({
+                title: "Export Successful",
+                description: "Session data copied to clipboard",
+                duration: 2000
+              });
+            }}
+          >
             <ClipboardCopy className="h-4 w-4 mr-1" /> Export
           </Button>
         </div>

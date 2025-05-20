@@ -42,6 +42,9 @@ export interface SpinResult {
   color: RouletteColor;
   isEven: boolean;
   isLow: boolean;
+  profitLoss: number;
+  runningTotal: number;
+  bets: Bet[];
 }
 
 // History of a spin
