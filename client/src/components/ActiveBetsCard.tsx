@@ -56,13 +56,6 @@ export function ActiveBetsCard() {
                 ${placedBets.reduce((sum, bet) => sum + bet.amount, 0)}
               </span>
             </div>
-            <Button 
-              variant="outline" 
-              className="w-full mt-2"
-              onClick={clearBets}
-            >
-              Clear Bets
-            </Button>
           </div>
         ) : (
           <div className="text-gray-400 text-sm p-4 text-center">No active bets</div>

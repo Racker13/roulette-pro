@@ -64,7 +64,8 @@ export function BetControlsCard() {
             onClick={() => {
               const result = Math.floor(Math.random() * 37);
               const store = useRouletteStore.getState();
-              store.addSpinResult(result); // This already clears bets
+              store.clearBets(); // Clear bets first
+              store.addSpinResult(result); 
             }}
           >
             Spin
