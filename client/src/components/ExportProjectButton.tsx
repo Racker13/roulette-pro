@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -24,7 +25,6 @@ export default function ExportProjectButton() {
         '/src/App.tsx',
         '/src/main.tsx',
         '/src/index.css',
-        '/index.html',
 
         // Components
         '/src/components/ActiveBetsCard.tsx',
@@ -35,35 +35,85 @@ export default function ExportProjectButton() {
         '/src/components/Layout.tsx',
         '/src/components/NewSessionControlsCard.tsx',
         '/src/components/NewSessionSetupCard.tsx',
+        '/src/components/RouletteTable.tsx',
         '/src/components/SessionControlsCard.tsx',
         '/src/components/SessionSetupCard.tsx',
         '/src/components/SessionSpinHistoryCard.tsx',
         '/src/components/SessionStats.tsx',
+        '/src/components/SpinHistory.tsx',
         '/src/components/StrategyInjectionCard.tsx',
-
-        // Store & Hooks
-        '/src/store/useRouletteStore.ts',
-        '/src/hooks/use-toast.ts',
-        '/src/hooks/useSessionStore.ts',
-        '/src/hooks/useSimulator.ts',
 
         // Core Logic
         '/src/core/betMap.ts',
         '/src/core/payoutRules.ts',
         '/src/core/spinLogic.ts',
 
-        // Types & Utils
+        // Hooks
+        '/src/hooks/use-mobile.tsx',
+        '/src/hooks/use-toast.ts',
+        '/src/hooks/useRoulette.tsx',
+        '/src/hooks/useSessionStore.ts',
+        '/src/hooks/useSimulator.ts',
+
+        // Lib & Utils
+        '/src/lib/queryClient.ts',
+        '/src/lib/roulette.ts',
         '/src/lib/types.ts',
         '/src/lib/utils.ts',
-        '/src/utils/getAttributesForNumber.ts'
+        '/src/utils/getAttributesForNumber.ts',
+
+        // Store
+        '/src/store/useRouletteStore.ts',
+
+        // Server
+        '/server/index.ts',
+        '/server/routes.ts',
+        '/server/storage.ts',
+        '/server/vite.ts',
+
+        // Config Files
+        '/tsconfig.json',
+        '/tailwind.config.ts',
+        '/postcss.config.js'
       ];
 
-      for (const file of allFiles) {
+      // Create src directory structure
+      const srcFolder = zip.folder('src');
+      const componentsFolder = srcFolder?.folder('components');
+      const coreFolder = srcFolder?.folder('core');
+      const hooksFolder = srcFolder?.folder('hooks');
+      const libFolder = srcFolder?.folder('lib');
+      const utilsFolder = srcFolder?.folder('utils');
+      const storeFolder = srcFolder?.folder('store');
+      const serverFolder = zip.folder('server');
+
+      // Fetch and add all files
+      for (const filePath of allFiles) {
         try {
-          const content = await fetchFile(file);
-          zip.file(file.replace('/src/', ''), content);
+          const content = await fetchFile(filePath);
+          const fileName = filePath.split('/').pop();
+
+          if (filePath.includes('/components/')) {
+            componentsFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/core/')) {
+            coreFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/hooks/')) {
+            hooksFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/lib/')) {
+            libFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/utils/')) {
+            utilsFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/store/')) {
+            storeFolder?.file(fileName || '', content);
+          } else if (filePath.includes('/server/')) {
+            serverFolder?.file(fileName || '', content);
+          } else if (filePath.startsWith('/src/')) {
+            srcFolder?.file(fileName || '', content);
+          } else {
+            zip.file(fileName || '', content);
+          }
         } catch (error) {
-          console.warn(`Skipping ${file}:`, error);
+          console.warn(`Skipping ${filePath}:`, error);
         }
       }
 
