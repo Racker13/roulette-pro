@@ -1,72 +1,98 @@
+import { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Button } from './ui/button';
+import type { ChipValue, Bet } from '@/lib/types';
+import { useRouletteStore } from '@/store/useRouletteStore';
+import { v4 as uuidv4 } from 'uuid';
 
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { useRouletteStore } from "@/store/useRouletteStore";
+const CHIP_VALUES: ChipValue[] = [1, 5, 10, 25, 100];
 
-export function BetControlsCard() {
-  const selectedChip = useRouletteStore(state => state.selectedChipValue);
-  const setSelectedChip = useRouletteStore(state => state.setSelectedChipValue);
+export const BetControlsCard = () => {
+  const [selectedAmount, setSelectedAmount] = useState<ChipValue>(1);
+  const placedBets = useRouletteStore((state) => state.placedBets);
+  const addSpinResult = useRouletteStore((state) => state.addSpinResult);
+  const clearBets = useRouletteStore((state) => state.clearBets);
+  const addBet = useRouletteStore((state) => state.addBet);
+  const setLastPlacedBets = useRouletteStore((state) => state.setLastPlacedBets);
+  const lastPlacedBets = useRouletteStore((state) => state.lastPlacedBets);
+
+  const handleChipSelect = (amount: ChipValue) => {
+    setSelectedAmount(amount);
+  };
+
+  const handleSpin = () => {
+    console.log('[SPIN] Placed Bets:', placedBets);
+    setLastPlacedBets([...placedBets]); // preserve full bet structure
+    const result = Math.floor(Math.random() * 37); // 0 to 36
+    addSpinResult(result);
+  };
+
+  const handleClear = () => {
+    setLastPlacedBets([...placedBets]);
+    clearBets();
+  };
+
+  const handleDoubleBets = () => {
+    const doubled: Bet[] = placedBets.map((bet) => ({
+      id: uuidv4(),
+      betType: bet.betType,
+      amount: bet.amount * 2,
+      displayName: bet.displayName,
+    }));
+    console.log('[2X] Doubled Bets:', doubled);
+    clearBets();
+    doubled.forEach(addBet);
+  };
+
+  const handleRebet = () => {
+    const rebets: Bet[] = lastPlacedBets.map((bet) => ({
+      id: uuidv4(),
+      betType: bet.betType,
+      amount: bet.amount,
+      displayName: bet.displayName,
+    }));
+    console.log('[REBET] Restoring Bets:', rebets);
+    clearBets();
+    rebets.forEach(addBet);
+  };
 
   return (
-    <Card className="bg-white rounded-lg shadow">
-      <TooltipProvider>
-        <CardHeader className="relative">
-          <CardTitle>Bet Controls</CardTitle>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="absolute top-0 left-0 mt-1 ml-1">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-muted text-muted-foreground text-xs cursor-help">
-                  i
-                </div>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Control your bet amounts and actions</p>
-            </TooltipContent>
-          </Tooltip>
-        </CardHeader>
-      </TooltipProvider>
-      <CardContent className="p-4">
-        
-        <div className="grid grid-cols-5 gap-2">
-          {[1, 5, 25, 100, 500].map(value => (
-            <button
-              key={`chip-${value}`}
-              onClick={() => setSelectedChip(value)}
-              aria-pressed={selectedChip === value}
-              className={`h-12 w-12 rounded-full font-bold text-sm flex items-center justify-center mx-auto transition-transform active:scale-95
-                ${value === 1 ? 'bg-red-100 border-2 border-red-300 text-red-700' : 
-                value === 5 ? 'bg-green-100 border-2 border-green-300 text-green-700' :
-                value === 25 ? 'bg-blue-100 border-2 border-blue-300 text-blue-700' :
-                value === 100 ? 'bg-purple-100 border-2 border-purple-300 text-purple-700' :
-                'bg-yellow-100 border-2 border-yellow-600 text-yellow-600'}`
-              }
-            >
-              ${value}
-            </button>
-          ))}
-        </div>
-        
-        <div className="flex justify-between mt-4">
-          <div className="space-x-2">
-            <Button variant="outline" onClick={() => useRouletteStore.getState().clearBets()}>
+    <Card>
+      <CardHeader>
+        <CardTitle>Bet Controls</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {/* Chip Selection */}
+          <div className="flex gap-2 justify-start flex-wrap">
+            {CHIP_VALUES.map((value) => (
+              <Button
+                key={value}
+                variant={selectedAmount === value ? 'default' : 'outline'}
+                onClick={() => handleChipSelect(value)}
+              >
+                ${value}
+              </Button>
+            ))}
+          </div>
+
+          {/* Inline Control Buttons */}
+          <div className="flex gap-2 flex-wrap">
+            <Button onClick={handleSpin} disabled={placedBets.length === 0}>
+              Spin
+            </Button>
+            <Button onClick={handleClear} variant="secondary" disabled={placedBets.length === 0}>
               Clear Bets
             </Button>
-            <Button variant="outline" disabled>
-              {/* TODO: Implement Double Bets */}
-              Double Bets
+            <Button onClick={handleDoubleBets} disabled={placedBets.length === 0}>
+              2×
+            </Button>
+            <Button onClick={handleRebet} disabled={lastPlacedBets.length === 0}>
+              Rebet
             </Button>
           </div>
-          <Button 
-            className="bg-green-600 hover:bg-green-700 text-white"
-            onClick={() => useRouletteStore.getState().addSpinResult(Math.floor(Math.random() * 37))}
-          >
-            Spin
-          </Button>
         </div>
       </CardContent>
     </Card>
   );
-}
+};

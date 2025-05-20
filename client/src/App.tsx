@@ -17,8 +17,8 @@ function App() {
       </div>
       <SessionSetupCard />
       <SessionControlsCard />
-      <BetControlsCard />
       <BettingBoardCard />
+      <BetControlsCard />
       <ActiveBetsCard />
       <LastResultsCard />
       <SessionSpinHistoryCard />

@@ -1,77 +1,61 @@
-
 import { create } from 'zustand';
-import type { ChipValue, Bet, SpinResult } from '@/lib/types';
+import type { Bet } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid';
 
-function getColorFromNumber(num: number | '00'): 'red' | 'black' | 'green' {
-  const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
-  const blackNumbers = [2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35];
-  if (num === 0 || num === '00') return 'green';
-  if (redNumbers.includes(Number(num))) return 'red';
-  return 'black';
-}
-
-interface RouletteState {
-  selectedChipValue: ChipValue;
+interface RouletteStore {
   placedBets: Bet[];
-  spinResults: SpinResult[];
-  autoSpinCount: number;
-  autoSpinMinutes: number;
-  sessionId: string | null;
-  setSelectedChipValue: (value: ChipValue) => void;
-  setAutoSpinCount: (count: number) => void;
-  setAutoSpinMinutes: (minutes: number) => void;
-  addBet: (bet: Omit<Bet, 'id'>) => void;
+  lastPlacedBets: Bet[];
+  spinResults: number[];
+
+  // Actions
+  addBet: (bet: Bet) => void;
+  addBets: (bets: Bet[]) => void;
   clearBets: () => void;
-  addSpinResult: (number: number | '00') => void;
+
+  addSpinResult: (result: number) => void;
   clearSpinResults: () => void;
-  exportSession: () => string;
+
+  setLastPlacedBets: (bets: Bet[]) => void;
+
   startSession: () => void;
-  reset: () => void;
 }
 
-export const useRouletteStore = create<RouletteState>((set, get) => ({
-  sessionId: null,
-  selectedChipValue: 1,
+export const useRouletteStore = create<RouletteStore>((set) => ({
+  // Initial state
   placedBets: [],
+  lastPlacedBets: [],
   spinResults: [],
-  autoSpinCount: 0,
-  autoSpinMinutes: 0,
-  setAutoSpinCount: (count) => set({ autoSpinCount: count }),
-  setAutoSpinMinutes: (minutes) => set({ autoSpinMinutes: minutes }),
-  setSelectedChipValue: (value) => set({ selectedChipValue: value }),
-  addBet: (bet) => set((state) => ({
-    placedBets: [...state.placedBets, { ...bet, id: crypto.randomUUID() }]
-  })),
+
+  // Bet actions
+  addBet: (bet) =>
+    set((state) => ({
+      placedBets: [...state.placedBets, bet],
+    })),
+
+  addBets: (bets) =>
+    set((state) => ({
+      placedBets: [...state.placedBets, ...bets],
+    })),
+
   clearBets: () => set({ placedBets: [] }),
-  addSpinResult: (number) => set((state) => {
-    const color = getColorFromNumber(number);
-    const numValue = typeof number === 'number' ? number : 0;
-    const result: SpinResult = {
-      number,
-      color,
-      isEven: numValue > 0 && numValue % 2 === 0,
-      isLow: numValue >= 1 && numValue <= 18
-    };
-    return {
-      spinResults: [result, ...state.spinResults].slice(0, 20)
-    };
-  }),
+
+  // Spin actions
+  addSpinResult: (result) =>
+    set((state) => ({
+      spinResults: [...state.spinResults, result],
+    })),
+
   clearSpinResults: () => set({ spinResults: [] }),
-  exportSession: () => JSON.stringify({
-    placedBets: get().placedBets,
-    spinResults: get().spinResults,
-    timestamp: new Date().toISOString()
-  }, null, 2),
 
-  startSession: () => set(() => ({
-    sessionId: `session-${Date.now()}`,
-    spinResults: [],
-    placedBets: []
-  })),
+  // Rebet memory
+  setLastPlacedBets: (bets) => set({ lastPlacedBets: bets }),
 
-  reset: () => set(() => ({
-    placedBets: [],
-    spinResults: [],
-    sessionId: null
-  }))
+  // NEW: Session start/reset logic
+  startSession: () =>
+    set(() => ({
+      placedBets: [],
+      spinResults: [],
+      lastPlacedBets: [],
+      // You could add sessionId: uuidv4() here if needed
+    })),
 }));
