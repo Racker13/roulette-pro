@@ -35,6 +35,8 @@ export default function ExportProjectButton() {
         '/src/components/ChipSelector.tsx',
         '/src/components/LastResultsCard.tsx',
         '/src/components/Layout.tsx',
+        '/src/components/NewSessionControlsCard.tsx',
+        '/src/components/NewSessionSetupCard.tsx',
         '/src/components/RouletteTable.tsx',
         '/src/components/SessionControlsCard.tsx',
         '/src/components/SessionSetupCard.tsx',
